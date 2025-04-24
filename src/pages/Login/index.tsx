@@ -15,7 +15,6 @@ export default function LoginForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Nếu đã đăng nhập thì chuyển hướng về trang chủ
   useEffect(() => {
     const isLoggedIn = !!userLocalStorage.get()?.token;
     if (isLoggedIn) {
@@ -29,11 +28,17 @@ export default function LoginForm() {
     try {
       const res = await authServices.login(values);
       const userData = res.data;
-
-      // Lưu localStorage và dispatch Redux
+  
+      // ✅ Kiểm tra vai trò
+      if (userData.role !== "admin") {
+        message.error("Chỉ tài khoản admin mới được phép đăng nhập.");
+        setLoading(false);
+        return;
+      }
+  
       userLocalStorage.set(userData);
       dispatch(loginSuccess(userData));
-
+  
       message.success("Đăng nhập thành công");
       navigate('/');
     } catch (err) {
@@ -43,6 +48,7 @@ export default function LoginForm() {
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

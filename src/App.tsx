@@ -2,24 +2,26 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layouts from "./layouts";
 import HomePage from "./pages";
 import NotFoundPage from "./pages/NotFoundPage";
-import Courses from "./pages/Courses";
 import LoginForm from "./pages/Login";
 import PrivateRoute from "./routes/PrivateRoute";
-import Reading from "./pages/Reading";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import TakeTestLayouts from "./layouts/TakeTestLayouts";
-import ExamInfo from "./pages/Reading/_components/info";
-import ReadingReview from "./pages/Reading/_components/review";
-import TakeListeningLayout from "./layouts/TakeListeningLayout";
-import Listening from "./pages/listening";
-import ListeningExamInfo from "./pages/listening/_components/info";
+import AddReadingTest from "./pages/reading/addReadingTest";
+import AddReadingPart1 from "./pages/reading/addReadingPart1";
+import AddReadingPart2 from "./pages/reading/addReadingPart2";
+import AddReadingPart3 from "./pages/reading/addReadingPart3";
+import AddReadingPart4 from "./pages/reading/addReadingPart4";
+import AddReadingPart5 from "./pages/reading/addReadingPart5";
+import AddListeningTest from "./pages/listening/addListeningTest";
+import AddListeningItem from "./pages/listening/addListeningItem";
+import ListeningView from "./pages/listening/listeningView";
+import ReadingView from "./pages/reading/readingView";
+import UsersView from "./pages/users";
 
 const App = () => {
   return (
     <Router>
       <Routes>
         <Route path="/auth/login" element={<LoginForm />} />
+
         <Route
           path="/"
           element={
@@ -32,13 +34,87 @@ const App = () => {
             />
           }
         />
+
+        {/* ✅ Các route cho phần thêm bài Reading */}
         <Route
-          path="/courses"
+          path="/reading/add"
           element={
             <PrivateRoute
               element={
                 <Layouts>
-                  <Courses />
+                  <AddReadingTest />
+                </Layouts>
+              }
+            />
+          }
+        />
+        <Route
+          path="/reading/add-part-1"
+          element={
+            <PrivateRoute
+              element={
+                <Layouts>
+                  <AddReadingPart1 />
+                </Layouts>
+              }
+            />
+          }
+        />
+        <Route
+          path="/reading/add-part-2"
+          element={
+            <PrivateRoute
+              element={
+                <Layouts>
+                  <AddReadingPart2 />
+                </Layouts>
+              }
+            />
+          }
+        />
+        <Route
+          path="/reading/add-part-3"
+          element={
+            <PrivateRoute
+              element={
+                <Layouts>
+                  <AddReadingPart3 />
+                </Layouts>
+              }
+            />
+          }
+        />
+        <Route
+          path="/reading/add-part-4"
+          element={
+            <PrivateRoute
+              element={
+                <Layouts>
+                  <AddReadingPart4 />
+                </Layouts>
+              }
+            />
+          }
+        />
+        <Route
+          path="/reading/add-part-5"
+          element={
+            <PrivateRoute
+              element={
+                <Layouts>
+                  <AddReadingPart5 />
+                </Layouts>
+              }
+            />
+          }
+        />
+        <Route
+          path="/reading/view"
+          element={
+            <PrivateRoute
+              element={
+                <Layouts>
+                  <ReadingView />
                 </Layouts>
               }
             />
@@ -46,67 +122,54 @@ const App = () => {
         />
 
         <Route
-          path="/reading/take-test"
+          path="/listening/add"
           element={
             <PrivateRoute
               element={
-                <TakeTestLayouts>
-                  <DndProvider backend={HTML5Backend}>
-                    <Reading />
-                  </DndProvider>
-                </TakeTestLayouts>
+                <Layouts>
+                  <AddListeningTest />
+                </Layouts>
               }
             />
           }
         />
         <Route
-          path="/reading/take-test/intro"
+          path="/listening/add-item"
           element={
             <PrivateRoute
               element={
-                <TakeTestLayouts>
-                  <ExamInfo />
-                </TakeTestLayouts>
+                <Layouts>
+                  <AddListeningItem />
+                </Layouts>
               }
             />
           }
         />
         <Route
-          path="/reading/take-test/review"
+          path="/listening/view"
           element={
             <PrivateRoute
               element={
-                <TakeTestLayouts>
-                  <ReadingReview />
-                </TakeTestLayouts>
+                <Layouts>
+                  <ListeningView />
+                </Layouts>
               }
             />
           }
         />
-        <Route
-          path="/listening/take-test"
-          element={
-            <PrivateRoute
-              element={
-                <TakeListeningLayout>
-                  <Listening />
-                </TakeListeningLayout>
-              }
-            />
-          }
-        />
-        <Route
-          path="/listening/take-test/intro"
-          element={
-            <PrivateRoute
-              element={
-                <TakeListeningLayout>
-                  <ListeningExamInfo />
-                </TakeListeningLayout>
-              }
-            />
-          }
-        />
+        
+<Route
+  path="/users/view"
+  element={
+    <PrivateRoute
+      element={
+        <Layouts>
+          <UsersView />
+        </Layouts>
+      }
+    />
+  }
+/>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>

@@ -6,6 +6,9 @@ import {
   SettingOutlined,
   UserOutlined,
   LogoutOutlined,
+  BookOutlined,
+  AudioOutlined,
+  FileAddOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Button, Layout, Menu, theme, message } from "antd";
@@ -57,6 +60,39 @@ export default function Sidebar({ setLoading }: SidebarProps) {
     { key: "/courses", label: "Khóa học của tôi", icon: <SettingOutlined /> },
     { key: "/schedule", label: "Lịch học", icon: <UserOutlined /> },
     { key: "/profile", label: "Hồ sơ cá nhân", icon: <UserOutlined /> },
+    { type: "divider" },
+    !collapsed
+      ? { key: "group_admin", label: "Khu vực quản lý", type: "group" }
+      : { type: "divider" },
+      {
+        key: "/users/view",
+        label: "Quản lý người dùng",
+        icon: <UserOutlined />,
+      },
+    {
+      key: "sub-reading",
+      label: "Reading",
+      icon: <BookOutlined />,
+      children: [
+        { key: "/reading/view", label: "Xwem danh sách", icon: <BookOutlined /> },
+        { key: "/reading/add", label: "Tạo bài Reading", icon: <FileAddOutlined /> },
+        { key: "/reading/add-part-1", label: "Part 1", icon: <FileAddOutlined /> },
+        { key: "/reading/add-part-2", label: "Part 2", icon: <FileAddOutlined /> },
+        { key: "/reading/add-part-3", label: "Part 3", icon: <FileAddOutlined /> },
+        { key: "/reading/add-part-4", label: "Part 4", icon: <FileAddOutlined /> },
+        { key: "/reading/add-part-5", label: "Part 5", icon: <FileAddOutlined /> },
+      ],
+    },
+    {
+      key: "sub-listening",
+      label: "Listening",
+      icon: <AudioOutlined />,
+      children: [
+        { key: "/listening/view", label: "Xem danh sách", icon: <BookOutlined /> },
+        { key: "/listening/add", label: "Tạo bài Listening", icon: <FileAddOutlined /> },
+        { key: "/listening/add-item", label: "Thêm câu hỏi", icon: <FileAddOutlined /> },
+      ],
+    },
     {
       key: "/auth/logout",
       label: "Đăng xuất",
@@ -84,13 +120,12 @@ export default function Sidebar({ setLoading }: SidebarProps) {
             alt="Logo"
             className="h-[60px] object-contain w-full cursor-pointer"
             onClick={() => {
-              {
-                localStorage.removeItem("reading_key_test_id");
-                localStorage.removeItem("reading_answers");
-                localStorage.removeItem("reading_correct");
-                localStorage.removeItem("reading_timer_start");
-                message.info('Bạn đã về trang chủ!')
-              }
+              localStorage.removeItem("reading_key_test_id");
+              localStorage.removeItem("reading_answers");
+              localStorage.removeItem("reading_correct");
+              localStorage.removeItem("reading_timer_start");
+              message.info("Bạn đã về trang chủ!");
+              navigate("/");
             }}
           />
         ) : (
@@ -99,13 +134,12 @@ export default function Sidebar({ setLoading }: SidebarProps) {
             alt="Small Logo"
             className="h-[40px] object-contain cursor-pointer"
             onClick={() => {
-              {
-                localStorage.removeItem("reading_key_test_id");
-                localStorage.removeItem("reading_answers");
-                localStorage.removeItem("reading_correct");
-                localStorage.removeItem("reading_timer_start");
-                message.info('Bạn đã về trang chủ!')
-              }
+              localStorage.removeItem("reading_key_test_id");
+              localStorage.removeItem("reading_answers");
+              localStorage.removeItem("reading_correct");
+              localStorage.removeItem("reading_timer_start");
+              message.info("Bạn đã về trang chủ!");
+              navigate("/");
             }}
           />
         )}
