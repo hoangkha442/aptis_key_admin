@@ -17,16 +17,18 @@ import {
   DeleteOutlined,
   UserAddOutlined,
   FilterOutlined,
-  StopOutlined,
+  // StopOutlined,
 } from "@ant-design/icons";
 
 import { userServices } from "../../config/userServices";
 import AddUserModal from "./_components/addUser";
 import { Tag } from "antd";
+import { sessionsService } from "../../config/sessionsServices";
 const { Option } = Select;
 
 export default function UsersView() {
   const [users, setUsers] = useState([]);
+  console.log('users: ', users);
   const [loading, setLoading] = useState(true);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
@@ -75,18 +77,18 @@ export default function UsersView() {
     setEditingUserId(record.user_id);
     setIsPasswordModalOpen(true);
   };
-  const handleActivateUser = async (id: number, oldData: any) => {
-    try {
-      await userServices.updateUser(id, {
-        ...oldData,
-        status: "active",
-      });
-      message.success("Đã kích hoạt người dùng");
-      fetchUsers();
-    } catch {
-      message.error("Thao tác thất bại");
-    }
-  };
+  // const handleActivateUser = async (id: number, oldData: any) => {
+  //   try {
+  //     await userServices.updateUser(id, {
+  //       ...oldData,
+  //       status: "active",
+  //     });
+  //     message.success("Đã kích hoạt người dùng");
+  //     fetchUsers();
+  //   } catch {
+  //     message.error("Thao tác thất bại");
+  //   }
+  // };
 
   const handleEditSubmit = async () => {
     try {
@@ -99,7 +101,15 @@ export default function UsersView() {
       message.error("Cập nhật thất bại");
     }
   };
-
+const handleDeleteSession = async (session_id: string) => {
+  try {
+    await sessionsService.deleteSession(session_id);
+    message.success("Đã xoá phiên bản đăng nhập");
+    fetchUsers();
+  } catch {
+    message.error("Xoá phiên thất bại");
+  }
+};
   const handlePasswordSubmit = async () => {
     try {
       const values = await passwordForm.validateFields();
@@ -112,18 +122,18 @@ export default function UsersView() {
       message.error("Đổi mật khẩu thất bại");
     }
   };
-  const handleEditSubmitInactive = async (id: number, oldData: any) => {
-    try {
-      await userServices.updateUser(id, {
-        ...oldData,
-        status: "inactive",
-      });
-      message.success("Đã vô hiệu hóa người dùng");
-      fetchUsers();
-    } catch {
-      message.error("Thao tác thất bại");
-    }
-  };
+  // const handleEditSubmitInactive = async (id: number, oldData: any) => {
+  //   try {
+  //     await userServices.updateUser(id, {
+  //       ...oldData,
+  //       status: "inactive",
+  //     });
+  //     message.success("Đã vô hiệu hóa người dùng");
+  //     fetchUsers();
+  //   } catch {
+  //     message.error("Thao tác thất bại");
+  //   }
+  // };
 
   const columns = [
     {
@@ -153,6 +163,34 @@ export default function UsersView() {
         return <Tag color={color}>{role.toUpperCase()}</Tag>;
       },
     },
+    {
+  title: "Phiên đăng nhập",
+  render: (_: any, record: any) => (
+    <>
+      {record.user_sessions && record.user_sessions.length > 0 ? (
+        <ul className="text-xs text-gray-600">
+          {record.user_sessions.map((session: any) => (
+            <li key={session.session_id} className="flex justify-between items-center mb-1">
+              <Tooltip title={`IP: ${session.ip_address}\nDevice: ${session.device}`}>
+                <span>{new Date(session.created_at).toLocaleString()}</span>
+              </Tooltip>
+              <Popconfirm
+                title="Xoá phiên đăng nhập này?"
+                onConfirm={() => handleDeleteSession(session.session_id)}
+              >
+                <Button type="link" size="small" danger>
+                  Xoá
+                </Button>
+              </Popconfirm>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <span>Không có</span>
+      )}
+    </>
+  ),
+},
     {
       title: "Trạng thái",
       dataIndex: "status",
@@ -192,7 +230,7 @@ export default function UsersView() {
             </Tooltip>
           )}
 
-          {record.status === "active" && (
+          {/* {record.status === "active" && (
             <Tooltip title="Vô hiệu hóa người dùng">
               <Popconfirm
                 title="Bạn có chắc muốn vô hiệu hóa người dùng này?"
@@ -213,7 +251,7 @@ export default function UsersView() {
                 onClick={() => handleActivateUser(record.user_id, record)}
               />
             </Tooltip>
-          )}
+          )} */}
         </div>
       ),
     },
