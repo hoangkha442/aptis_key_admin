@@ -9,7 +9,7 @@ import {
   Form,
   Input,
   Select,
-  Tooltip 
+  Tooltip,
 } from "antd";
 import {
   EditOutlined,
@@ -87,7 +87,7 @@ export default function UsersView() {
       message.error("Thao tác thất bại");
     }
   };
-  
+
   const handleEditSubmit = async () => {
     try {
       const values = await form.validateFields();
@@ -162,61 +162,61 @@ export default function UsersView() {
       },
     },
     {
-        title: "Hành động",
-        render: (_: any, record: any) => (
-          <div className="flex flex-wrap gap-2">
-            <Tooltip title="Sửa thông tin">
+      title: "Hành động",
+      render: (_: any, record: any) => (
+        <div className="flex flex-wrap gap-2">
+          <Tooltip title="Sửa thông tin">
+            <Button
+              type="link"
+              icon={<EditOutlined />}
+              onClick={() => handleEdit(record)}
+            />
+          </Tooltip>
+
+          <Tooltip title="Đổi mật khẩu">
+            <Button
+              type="link"
+              icon={<KeyOutlined />}
+              onClick={() => handleUpdatePassword(record)}
+            />
+          </Tooltip>
+
+          {record.role === "student" && (
+            <Tooltip title="Xoá người dùng">
+              <Popconfirm
+                title="Bạn có chắc muốn xoá người dùng này?"
+                onConfirm={() => handleDelete(record.user_id)}
+              >
+                <Button type="link" danger icon={<DeleteOutlined />} />
+              </Popconfirm>
+            </Tooltip>
+          )}
+
+          {record.status === "active" && (
+            <Tooltip title="Vô hiệu hóa người dùng">
+              <Popconfirm
+                title="Bạn có chắc muốn vô hiệu hóa người dùng này?"
+                onConfirm={() =>
+                  handleEditSubmitInactive(record.user_id, record)
+                }
+              >
+                <Button type="link" danger icon={<StopOutlined />} />
+              </Popconfirm>
+            </Tooltip>
+          )}
+
+          {record.status === "inactive" && (
+            <Tooltip title="Kích hoạt lại người dùng">
               <Button
                 type="link"
-                icon={<EditOutlined />}
-                onClick={() => handleEdit(record)}
+                icon={<StopOutlined rotate={180} />}
+                onClick={() => handleActivateUser(record.user_id, record)}
               />
             </Tooltip>
-      
-            <Tooltip title="Đổi mật khẩu">
-              <Button
-                type="link"
-                icon={<KeyOutlined />}
-                onClick={() => handleUpdatePassword(record)}
-              />
-            </Tooltip>
-      
-            {record.role === "student" && (
-              <Tooltip title="Xoá người dùng">
-                <Popconfirm
-                  title="Bạn có chắc muốn xoá người dùng này?"
-                  onConfirm={() => handleDelete(record.user_id)}
-                >
-                  <Button type="link" danger icon={<DeleteOutlined />} />
-                </Popconfirm>
-              </Tooltip>
-            )}
-      
-            {record.status === "active" && (
-              <Tooltip title="Vô hiệu hóa người dùng">
-                <Popconfirm
-                  title="Bạn có chắc muốn vô hiệu hóa người dùng này?"
-                  onConfirm={() =>
-                    handleEditSubmitInactive(record.user_id, record)
-                  }
-                >
-                  <Button type="link" danger icon={<StopOutlined />} />
-                </Popconfirm>
-              </Tooltip>
-            )}
-      
-            {record.status === "inactive" && (
-              <Tooltip title="Kích hoạt lại người dùng">
-                <Button
-                  type="link"
-                  icon={<StopOutlined rotate={180} />}
-                  onClick={() => handleActivateUser(record.user_id, record)}
-                />
-              </Tooltip>
-            )}
-          </div>
-        ),
-      }
+          )}
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -251,12 +251,35 @@ export default function UsersView() {
       {loading ? (
         <Spin />
       ) : (
+        //   <Table
+        //     dataSource={
+        //       filteredRole
+        //         ? users.filter((u: any) => u.role === filteredRole)
+        //         : users
+        //     }
+        //     columns={columns}
+        //     rowKey="user_id"
+        //     pagination={{ pageSize: 5 }}
+        //   />
         <Table
-          dataSource={
-            filteredRole
-              ? users.filter((u: any) => u.role === filteredRole)
-              : users
-          }
+          dataSource={(filteredRole
+            ? users.filter((u: any) => u.role === filteredRole)
+            : users
+          ).sort((a: any, b: any) => {
+            const rolePriority: Record<string, number> = {
+              admin: 0,
+              lecturer: 1,
+              student: 2,
+            };
+
+            // Ưu tiên theo role
+            const roleA = rolePriority[a.role] ?? 999;
+            const roleB = rolePriority[b.role] ?? 999;
+            if (roleA !== roleB) return roleA - roleB;
+
+            // Nếu cùng role thì ai có user_id lớn hơn (mới hơn) lên trước
+            return b.user_id - a.user_id;
+          })}
           columns={columns}
           rowKey="user_id"
           pagination={{ pageSize: 5 }}

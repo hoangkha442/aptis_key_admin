@@ -1,5 +1,4 @@
-// ✅ AddListeningItem.tsx
-import { Form, Input, Button, Card, message, Select } from "antd";
+import { Form, Input, Button, Card, message, Select, Row, Col } from "antd";
 import { useState, useEffect } from "react";
 import { listeningService } from "../../../config/listeningServices";
 
@@ -87,7 +86,6 @@ export default function AddListeningItem() {
   const handleQuestionNumberChange = (questionNumber: string) => {
     const template = QUESTION_TEMPLATES[questionNumber];
     if (template) {
-      // Reset fields before applying template
       form.setFieldsValue({
         question_number: questionNumber,
         tittle: undefined,
@@ -118,75 +116,98 @@ export default function AddListeningItem() {
         onFinish={onFinish}
         initialValues={{ script: '', topic: '', options: '[]' }}
       >
-        <Form.Item
-          label="ID Listening Test"
-          name="listening_test_id"
-          rules={[{ required: true, message: "Vui lòng chọn bài Listening" }]}
-        >
-          <Select placeholder="Chọn bài Listening">
-            {listeningTests.map((test) => (
-              <Select.Option
-                key={test.listening_test_id}
-                value={test.listening_test_id}
-              >
-                {test.listening_test_id} - {test.tittle}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
+              label="ID Listening Test"
+              name="listening_test_id"
+              rules={[{ required: true, message: "Vui lòng chọn bài Listening" }]}
+            >
+              <Select placeholder="Chọn bài Listening">
+                {listeningTests.map((test) => (
+                  <Select.Option
+                    key={test.listening_test_id}
+                    value={test.listening_test_id}
+                  >
+                    {test.listening_test_id} - {test.tittle}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label="Question Number"
+              name="question_number"
+              rules={[{ required: true, message: "Vui lòng chọn dạng câu hỏi" }]}
+            >
+              <Select placeholder="Chọn dạng câu hỏi" onChange={handleQuestionNumberChange}>
+                {Object.keys(QUESTION_TEMPLATES).map((key) => (
+                  <Select.Option key={key} value={key}>
+                    {key}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
 
-        <Form.Item
-          label="Question Number"
-          name="question_number"
-          rules={[{ required: true, message: "Vui lòng chọn dạng câu hỏi" }]}
-        >
-          <Select
-            placeholder="Chọn dạng câu hỏi"
-            onChange={handleQuestionNumberChange}
-          >
-            {Object.keys(QUESTION_TEMPLATES).map((key) => (
-              <Select.Option key={key} value={key}>
-                {key}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item label="Tiêu đề" name="tittle" rules={[{ required: true }]}>
+              <Input placeholder="Ví dụ: Listening Question 1" />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label="Mô tả" name="description">
+              <Input placeholder="Ví dụ: Choose the correct answer." />
+            </Form.Item>
+          </Col>
+        </Row>
 
-        <Form.Item label="Tiêu đề" name="tittle" rules={[{ required: true }]}>
-          <Input placeholder="Ví dụ: Listening Question 1" />
-        </Form.Item>
-        <Form.Item label="Mô tả" name="description">
-          <Input placeholder="Ví dụ: Choose the correct answer." />
-        </Form.Item>
-        <Form.Item
-          label="Câu hỏi"
-          name="content"
-          rules={[{ required: true }]}
-        >
-          <Input placeholder="Ví dụ: What time do they meet?" />
-        </Form.Item>
-        <Form.Item
-          label="Đáp án đúng"
-          name="correct_answer"
-          rules={[{ required: true }]}
-        >
-          <Input placeholder="Ví dụ: 6.30pm" />
-        </Form.Item>
-        <Form.Item
-          label="Options (JSON)"
-          name="options"
-          rules={[{ required: true }]}
-        >
-          <Input.TextArea
-            rows={2}
-            placeholder='["Option A", "Option B", "Option C"]'
-          />
-        </Form.Item>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
+              label="Câu hỏi"
+              name="content"
+              rules={[{ required: true }]}
+            >
+              <Input placeholder="Ví dụ: What time do they meet?" />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              label="Đáp án đúng"
+              name="correct_answer"
+              rules={[{ required: true }]}
+            >
+              <Input placeholder="Ví dụ: 6.30pm" />
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
+              label="Options (JSON)"
+              name="options"
+              rules={[{ required: true }]}
+            >
+              <Input.TextArea
+                rows={2}
+                placeholder='["Option A", "Option B", "Option C"]'
+              />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label="Topic" name="topic">
+              <Input placeholder="Ví dụ: General Listening" />
+            </Form.Item>
+          </Col>
+        </Row>
+
         <Form.Item label="Script" name="script">
           <Input.TextArea rows={3} placeholder="Nội dung script nếu có..." />
-        </Form.Item>
-        <Form.Item label="Topic" name="topic">
-          <Input placeholder="Ví dụ: General Listening" />
         </Form.Item>
 
         <Form.Item>

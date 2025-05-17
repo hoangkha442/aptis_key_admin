@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import '@ant-design/v5-patch-for-react-19'; 
 import { authServices } from "../config/authServices";
 import { userLocalStorage } from "../config/userLocal";
+import { useNavigate } from "react-router-dom";
 
 interface LayoutProps {
   children: ReactNode;
@@ -12,7 +13,7 @@ interface LayoutProps {
 const { Content } = Layout;
 
 const Layouts = ({ children }: LayoutProps) => {
-  
+  const navigate = useNavigate()
   const [user, setUser] = useState< null>(null);
   const [loading, setLoading] = useState(false); 
   useEffect(() => { 
@@ -23,6 +24,8 @@ const Layouts = ({ children }: LayoutProps) => {
         setUser(res.data)
       }).catch((err) => { 
         console.log('err: ', err);
+        localStorage.removeItem("USER_LOCAL");
+      navigate("/auth/login");
       })
     }
    }, [])

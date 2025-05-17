@@ -15,6 +15,7 @@ import AddListeningItem from "./pages/listening/addListeningItem";
 import ListeningView from "./pages/listening/listeningView";
 import ReadingView from "./pages/reading/readingView";
 import UsersView from "./pages/users";
+import CourseView from "./pages/course";
 
 const App = () => {
   return (
@@ -157,19 +158,31 @@ const App = () => {
             />
           }
         />
-        
-<Route
-  path="/users/view"
-  element={
-    <PrivateRoute
-      element={
-        <Layouts>
-          <UsersView />
-        </Layouts>
-      }
-    />
-  }
-/>
+
+        <Route
+          path="/users/view"
+          element={
+            <PrivateRoute
+              element={
+                <Layouts>
+                  <UsersView />
+                </Layouts>
+              }
+            />
+          }
+        />
+        <Route
+          path="/course/view"
+          element={
+            <PrivateRoute
+              element={
+                <Layouts>
+                  <CourseView />
+                </Layouts>
+              }
+            />
+          }
+        />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>

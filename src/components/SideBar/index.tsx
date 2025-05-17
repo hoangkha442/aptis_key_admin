@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  MailOutlined,
-  SettingOutlined,
+
   UserOutlined,
   LogoutOutlined,
   BookOutlined,
@@ -54,14 +53,6 @@ export default function Sidebar({ setLoading }: SidebarProps) {
 
   const studentMenu: MenuItem[] = [
     !collapsed
-      ? { key: "group_student", label: "Khu vực học tập", type: "group" }
-      : { type: "divider" },
-    { key: "/", label: "Trang chủ", icon: <MailOutlined /> },
-    { key: "/courses", label: "Khóa học của tôi", icon: <SettingOutlined /> },
-    { key: "/schedule", label: "Lịch học", icon: <UserOutlined /> },
-    { key: "/profile", label: "Hồ sơ cá nhân", icon: <UserOutlined /> },
-    { type: "divider" },
-    !collapsed
       ? { key: "group_admin", label: "Khu vực quản lý", type: "group" }
       : { type: "divider" },
       {
@@ -69,12 +60,17 @@ export default function Sidebar({ setLoading }: SidebarProps) {
         label: "Quản lý người dùng",
         icon: <UserOutlined />,
       },
+      {
+        key: "/course/view",
+        label: "Quản lý Khóa học",
+        icon: <UserOutlined />,
+      },
     {
       key: "sub-reading",
       label: "Reading",
       icon: <BookOutlined />,
       children: [
-        { key: "/reading/view", label: "Xwem danh sách", icon: <BookOutlined /> },
+        { key: "/reading/view", label: "Xem danh sách", icon: <BookOutlined /> },
         { key: "/reading/add", label: "Tạo bài Reading", icon: <FileAddOutlined /> },
         { key: "/reading/add-part-1", label: "Part 1", icon: <FileAddOutlined /> },
         { key: "/reading/add-part-2", label: "Part 2", icon: <FileAddOutlined /> },
